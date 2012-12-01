@@ -7,10 +7,14 @@ var myStlString = stlFromGeometry( myGeometry )
 ```
 
 ## Options
-Currently there is just one option and that is `useObjectPosition`. This will add the position of your geometry to the vertices, effectively offsetting it in the STL file.
+`useObjectPosition`
+(boolean) This will add the position of your geometry to the vertices, effectively offsetting it in the STL file. This is useful when you plan to combine multiple geometries.
+
+`download`
+(boolean) Force the browser to download the STL file.
 
 ```javascript
-var myStlString = stlFromGeometry( myGeometry, {useObjectPosition:true} )
+var myStlString = stlFromGeometry( myGeometry, {download:true, useObjectPosition:true} )
 ```
 
 ## Limitations and Todo

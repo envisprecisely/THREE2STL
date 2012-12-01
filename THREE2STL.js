@@ -6,6 +6,7 @@ function stlFromGeometry( geometry, options ) {
 	var addX = 0
 	var addY = 0
 	var addZ = 0
+	var download = false
 
 	if ( options ) {
 		if ( options.useObjectPosition ) {
@@ -13,9 +14,11 @@ function stlFromGeometry( geometry, options ) {
 			addY = geometry.mesh.position.y
 			addZ = geometry.mesh.position.z
 		}
-	}
 
-	console.log( geometry )
+		if ( options.download ) {
+			download = true
+		}
+	}
 
 	var stl = ''
 	stl += 'solid\n'
@@ -31,13 +34,17 @@ function stlFromGeometry( geometry, options ) {
 		stl += 'outer loop\n'
 		for ( var j = 0; j < verts.length; j++ ) {
 			var vert = verts[j]
-			stl += 'vertex ' + vert.x+addX + ' ' + vert.y+add> + ' ' + vert.z+addZ + '\n'
+			stl += 'vertex ' + vert.x+addX + ' ' + vert.y+addY + ' ' + vert.z+addZ + '\n'
 		}
 		stl += 'endloop\n'
 		stl += 'endfacet\n'
 	}
 
 	stl += 'endsolid'
+
+	if ( download ) {
+		document.location = 'data:Application/octet-stream, ' + encodeURIComponent( stl )
+	}
 
 	return stl
 }
