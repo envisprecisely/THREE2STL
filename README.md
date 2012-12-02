@@ -1,5 +1,6 @@
 # A THREE.js to STL exporter
 Pretty straightforward: you pass in a geometry and get an ASCII STL dump in return.
+You will need [THREE.js](https://github.com/mrdoob/three.js), of course.
 
 ## Usage
 ```javascript
@@ -17,5 +18,5 @@ var myStlString = stlFromGeometry( myGeometry )
 var myStlString = stlFromGeometry( myGeometry, {download:true, useObjectPosition:true} )
 ```
 
-## Limitations and Todo
-Right now the export only works on geometries that are triangulated. If you have `Face4` faces in your geometry, the exporter will not work.
+## Notes
+If you have quads (Face4) in your model, the exporter will do some super basic triangulation. It's probably better to do this by hand first than to rely on that algorithm.

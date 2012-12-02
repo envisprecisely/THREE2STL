@@ -20,24 +20,60 @@ function stlFromGeometry( geometry, options ) {
 		}
 	}
 
+	
+	var facetToStl = function( verts, normal ) {
+		var faceStl = ''
+		faceStl += 'facet normal ' + normal.x + ' ' + normal.y + ' ' +  normal.z + '\n'
+		faceStl += 'outer loop\n'
+
+		for ( var j = 0; j < 3; j++ ) {
+			var vert = verts[j]
+			faceStl += 'vertex ' + vert.x+addX + ' ' + vert.y+addY + ' ' + vert.z+addZ + '\n'
+		}
+
+		faceStl += 'endloop\n'
+		faceStl += 'endfacet\n'
+	
+		return faceStl
+	}
+
+	// start bulding the STL string
 	var stl = ''
 	stl += 'solid\n'
 	
 	for ( var i = 0; i < geometry.faces.length; i++ ) {
 		var face = geometry.faces[i]
-		var verts = [
-			geometry.vertices[ face.a ],
-			geometry.vertices[ face.b ],
-			geometry.vertices[ face.c ]
-		]
-		stl += 'facet normal ' + face.normal.x + ' ' + face.normal.y + ' ' +  face.normal.z + '\n'
-		stl += 'outer loop\n'
-		for ( var j = 0; j < verts.length; j++ ) {
-			var vert = verts[j]
-			stl += 'vertex ' + vert.x+addX + ' ' + vert.y+addY + ' ' + vert.z+addZ + '\n'
+
+		// if we have just a griangle, that's easy. just write them to the file
+		if ( face.d === undefined ) {
+			var verts = [
+				geometry.vertices[ face.a ],
+				geometry.vertices[ face.b ],
+				geometry.vertices[ face.c ]
+			]
+
+			stl += facetToStl( verts, face.normal )
+
+		} else {
+			// if it's a quad, we need to triangulate it first
+			// split the quad into two triangles: abd and bcd
+			var verts = []
+			verts[0] = [
+				geometry.vertices[ face.a ],
+				geometry.vertices[ face.b ],
+				geometry.vertices[ face.d ]
+			]
+			verts[1] = [
+				geometry.vertices[ face.b ],
+				geometry.vertices[ face.c ],
+				geometry.vertices[ face.d ]
+			]
+			
+			for ( var k = 0; k<2; k++ ) {
+				stl += facetToStl( verts[k], face.normal )
+			}
+			
 		}
-		stl += 'endloop\n'
-		stl += 'endfacet\n'
 	}
 
 	stl += 'endsolid'
