@@ -28,7 +28,7 @@ function stlFromGeometry( geometry, options ) {
 
 		for ( var j = 0; j < 3; j++ ) {
 			var vert = verts[j]
-			faceStl += 'vertex ' + vert.x+addX + ' ' + vert.y+addY + ' ' + vert.z+addZ + '\n'
+			faceStl += 'vertex ' + (vert.x+addX) + ' ' + (vert.y+addY) + ' ' + (vert.z+addZ) + '\n'
 		}
 
 		faceStl += 'endloop\n'
